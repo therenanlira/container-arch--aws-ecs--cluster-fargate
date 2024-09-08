@@ -1,5 +1,5 @@
 locals {
-  lb_resource_name = "lb"
+  lb_resource_name = "${substr(var.load_balancer_type, 0, 1)}lb"
 }
 
 resource "aws_security_group" "load_balancer_sg" {
@@ -12,6 +12,10 @@ resource "aws_security_group" "load_balancer_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -26,7 +30,7 @@ resource "aws_security_group_rule" "load_balancer_sg_ingress" {
 }
 
 resource "aws_lb" "load_balancer" {
-  name               = "${var.project_name}--${substr(var.load_balancer_type, 0, 1)}${local.lb_resource_name}"
+  name               = "${var.project_name}--${local.lb_resource_name}"
   internal           = var.load_balancer_internal
   load_balancer_type = var.load_balancer_type
   security_groups    = [aws_security_group.load_balancer_sg.id]
