@@ -37,6 +37,12 @@ resource "aws_autoscaling_group" "ecs_asg_ondemand" {
     value               = true
     propagate_at_launch = true
   }
+
+  lifecycle {
+    ignore_changes = [
+      desired_capacity
+    ]
+  }
 }
 
 resource "aws_ecs_capacity_provider" "ecs_capacity_provider_ondemand" {
