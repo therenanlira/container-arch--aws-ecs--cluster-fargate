@@ -17,6 +17,11 @@ resource "aws_iam_role" "ecs_instance_profile_role" {
       }
     ]
   })
+
+  tags = {
+    Name     = "${var.project_name}--${local.iam_resource_name}--role"
+    Resource = "iam-role"
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_instance_profile_policy_ec2" {

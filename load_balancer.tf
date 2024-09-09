@@ -17,6 +17,11 @@ resource "aws_security_group" "load_balancer_sg" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags = {
+    Name     = "${var.project_name}--${local.lb_resource_name}--sg"
+    Resource = "load-balancer-sg"
+  }
 }
 
 resource "aws_security_group_rule" "load_balancer_sg_ingress" {
@@ -43,6 +48,11 @@ resource "aws_lb" "load_balancer" {
 
   enable_cross_zone_load_balancing = false
   enable_deletion_protection       = false
+
+  tags = {
+    Name     = "${var.project_name}--${local.lb_resource_name}"
+    Resource = "load-balancer"
+  }
 }
 
 resource "aws_lb_listener" "load_balancer_http_listener" {
@@ -57,5 +67,10 @@ resource "aws_lb_listener" "load_balancer_http_listener" {
       message_body = "LinuxTips - ECS Cluster"
       status_code  = "200"
     }
+  }
+
+  tags = {
+    Name     = "${var.project_name}--${local.lb_resource_name}--http-listener"
+    Resource = "load-balancer-listener"
   }
 }

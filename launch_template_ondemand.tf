@@ -36,4 +36,9 @@ resource "aws_launch_template" "launch_template_ondemand" {
   user_data = base64encode(templatefile("${path.module}/templates/user_data.tpl", {
     cluster_name = var.project_name
   }))
+
+  tags = {
+    Name     = "${var.project_name}--${local.lt_ondemand_resource_name}"
+    Resource = local.lt_ondemand_resource_name
+  }
 }

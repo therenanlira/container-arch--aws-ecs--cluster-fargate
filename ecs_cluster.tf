@@ -3,11 +3,16 @@ locals {
 }
 
 resource "aws_ecs_cluster" "ecs_cluster" {
-  name = "${var.project_name}--${local.ecs_resource_name}"
+  name = var.project_name
 
   setting {
     name  = "containerInsights"
     value = "enabled"
+  }
+
+  tags = {
+    Name     = "${var.project_name}"
+    Resource = "ecs-cluster"
   }
 }
 
