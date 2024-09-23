@@ -3,6 +3,7 @@ locals {
 }
 
 resource "aws_autoscaling_group" "ecs_asg_ondemand" {
+  count       = var.cluster_cp == "EC2" ? 1 : 0
   name_prefix = "${var.project_name}--${local.asg_ondemand_resource_name}"
 
   vpc_zone_identifier = [
@@ -46,10 +47,11 @@ resource "aws_autoscaling_group" "ecs_asg_ondemand" {
 }
 
 resource "aws_ecs_capacity_provider" "ecs_capacity_provider_ondemand" {
-  name = "${var.project_name}--ecs-cp--ondemand"
+  count = var.cluster_cp == "EC2" ? 1 : 0
+  name  = "${var.project_name}--ecs-cp--ondemand"
 
   auto_scaling_group_provider {
-    auto_scaling_group_arn = aws_autoscaling_group.ecs_asg_ondemand.arn
+    auto_scaling_group_arn = aws_autoscaling_group.ecs_asg_ondemand[0].arn
 
     managed_scaling {
       status                    = "ENABLED"
