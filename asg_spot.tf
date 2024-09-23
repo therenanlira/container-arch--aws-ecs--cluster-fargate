@@ -3,6 +3,7 @@ locals {
 }
 
 resource "aws_autoscaling_group" "ecs_asg_spot" {
+  count       = var.cluster_cp == "SPOT" ? 1 : 0
   name_prefix = "${var.project_name}--${local.asg_spot_resource_name}"
 
   vpc_zone_identifier = [
@@ -40,10 +41,11 @@ resource "aws_autoscaling_group" "ecs_asg_spot" {
 }
 
 resource "aws_ecs_capacity_provider" "ecs_capacity_provider_spot" {
-  name = "${var.project_name}--ecs-cp--spot"
+  count = var.cluster_cp == "SPOT" ? 1 : 0
+  name  = "${var.project_name}--ecs-cp--spot"
 
   auto_scaling_group_provider {
-    auto_scaling_group_arn = aws_autoscaling_group.ecs_asg_spot.arn
+    auto_scaling_group_arn = aws_autoscaling_group.ecs_asg_spot[0].arn
 
     managed_scaling {
       status                    = "ENABLED"

@@ -81,6 +81,11 @@ variable "node_volume_type" {
   type        = string
 }
 
+variable "cluster_cp" {
+  description = "The capacity provider for the ECS cluster"
+  type        = string
+}
+
 variable "cluster_ondemand_min_size" {
   description = "The minimum size for the ECS cluster"
   type        = number
@@ -111,6 +116,22 @@ variable "cluster_spot_desired_capacity" {
   type        = number
 }
 
+variable "cluster_fargate_min_size" {
+  description = "The minimum size for the ECS cluster"
+  type        = number
+}
+
+variable "cluster_fargate_max_size" {
+  description = "The maximum size for the ECS cluster"
+  type        = number
+}
+
+variable "cluster_fargate_desired_capacity" {
+  description = "The desired capacity for the ECS cluster"
+  type        = number
+}
+
+
 variable "cp_ondemand_min_scaling_step_size" {
   description = "The minimum scaling step size for the ECS capacity provider"
   type        = number
@@ -139,4 +160,28 @@ variable "cp_spot_max_scaling_step_size" {
 variable "cp_spot_target_capacity" {
   description = "The target capacity for the ECS capacity provider"
   type        = number
+}
+
+variable "cp_fargate_min_scaling_step_size" {
+  description = "The minimum scaling step size for the ECS capacity provider"
+  type        = number
+}
+
+variable "cp_fargate_max_scaling_step_size" {
+  description = "The maximum scaling step size for the ECS capacity provider"
+  type        = number
+}
+
+variable "cp_fargate_target_capacity" {
+  description = "The target capacity for the ECS capacity provider"
+  type        = number
+}
+
+variable "capacity_providers" {
+  description = "The capacity provider for the ECS cluster"
+  type        = list(any)
+  default = [
+    "FARGATE",
+    "FARGATE_SPOT"
+  ]
 }
